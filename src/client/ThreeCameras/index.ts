@@ -1,0 +1,1 @@
+export { ExtendedPerspectiveCamera } from "./ExtendedPerspectiveCamera";

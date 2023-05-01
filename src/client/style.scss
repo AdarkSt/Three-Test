@@ -1,0 +1,73 @@
+.user-controls {
+    display: flex;
+    position: absolute;
+    top: 5%;
+    column-gap: 5px;
+    margin-left: 20px;
+}
+
+.input-field {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 24px;
+    background-color: #444444;
+    color: #EEEEEE;
+    font-size: 16px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.05);
+
+    &:focus {
+        outline: none;
+        background-color: #666666;
+        box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    &.error {
+        background-color: #8b0000;
+        box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.2);
+    }
+
+    &.error:focus {
+        background-color: #b22222;
+        box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.4);
+    }
+}
+
+.button {
+    background-color: #343a40;
+    border: none;
+    border-radius: 24px;
+    color: #f8f9fa;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+    &:hover {
+        background-color: #495057;
+        color: #f8f9fa;
+    }
+
+    &:active {
+        background-color: #212529;
+        color: #f8f9fa;
+    }
+}
+
+.controll-btn {
+    position: absolute;
+    top: 12%
+}
+
+#front-btn {
+    left: 14%;
+}
+#back-btn {
+    left: 25%;
+}
+
+#width-input {
+    left: 10%;
+}
+#depth-input{
+    left: 25%;
+}
