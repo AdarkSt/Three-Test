@@ -87,10 +87,10 @@ export class Cube {
     this.getCubeMesh().geometry = newGeometry;
   }
 
-  public setMaterialOptions =(options: CubeTextureOptions): void => {
+  public setMaterialOptions = (options: CubeTextureOptions): void => {
     const material = this.getMaterial();
     material.setValues(options);
-  }
+  };
 
   public renderCube = (scene: THREE.Scene): void => {
     const cube = this.getCubeMesh();
@@ -110,10 +110,11 @@ export class Cube {
   static changeSizesFromField = (
     field: HTMLInputElement,
     dimensionName: "width" | "height" | "depth",
-    cube: Cube
+    cube: Cube,
+    converter: Function = () => {}
   ) => {
     if (isValidNumber(field.value)) {
-      cube.setCubeSize({ [dimensionName]: Number(field.value) });
+      cube.setCubeSize({ [dimensionName]: converter(Number(field.value)) });
       field.classList.remove("error");
     } else {
       if (field.value !== "") {

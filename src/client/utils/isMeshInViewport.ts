@@ -17,7 +17,6 @@ export const isMeshInViewport = (
   const viewportWidth = calculateViewportWidth(camera, mesh);
 
   const meshDimensions = getMeshDimensions(mesh);
-  meshDimensions.width;
 
   if (
     viewportHeight < meshDimensions.height ||
