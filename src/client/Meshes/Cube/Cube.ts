@@ -3,12 +3,14 @@ import { isValidNumber } from "../../utils/isValidNumber";
 
 export class Cube {
   private geometry: THREE.BoxGeometry;
-  private readonly material: CubeMaterial;
+  private material: CubeMaterial | Array<CubeMaterial>;
   private readonly mesh: THREE.Mesh;
   private cubeOptions: CubeOptions;
   constructor(
     cubeOptions: CubeOptions = {},
-    private readonly cubeTextureOptions: CubeTextureOptions
+    private cubeTextureOptions:
+      | CubeTextureOptions
+      | Array<CubeTextureOptions>
   ) {
     const {
       width = 1,
@@ -35,7 +37,12 @@ export class Cube {
       heightSegments,
       depthSegments
     );
-    this.material = new THREE.MeshPhongMaterial(cubeTextureOptions);
+    this.material =
+      cubeTextureOptions instanceof Array
+        ? cubeTextureOptions.map(
+            (option) => new THREE.MeshPhongMaterial(option)
+          )
+        : new THREE.MeshPhongMaterial(cubeTextureOptions);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
   }
 
@@ -43,7 +50,7 @@ export class Cube {
     return this.geometry;
   }
 
-  public getMaterial(): CubeMaterial {
+  public getMaterial(): CubeMaterial | Array<CubeMaterial> {
     return this.material;
   }
 
@@ -55,7 +62,7 @@ export class Cube {
     return this.cubeOptions;
   }
 
-  public getCubeTexture(): CubeTextureOptions {
+  public getCubeTexture(): CubeTextureOptions | Array<CubeTextureOptions> {
     return this.cubeTextureOptions;
   }
 
@@ -87,9 +94,16 @@ export class Cube {
     this.getCubeMesh().geometry = newGeometry;
   }
 
-  public setMaterialOptions = (options: CubeTextureOptions): void => {
+  public setMaterialOptions = (
+    options: CubeTextureOptions,
+    indexOfMateria: number = 0
+  ): void => {
     const material = this.getMaterial();
-    material.setValues(options);
+    if (material instanceof Array) {
+      material[indexOfMateria].setValues(options);
+    } else {
+      material.setValues(options);
+    }
   };
 
   public renderCube = (scene: THREE.Scene): void => {
@@ -104,7 +118,24 @@ export class Cube {
 
     scene.remove(cube);
     cubeGeometry.dispose();
-    cubeMaterial.dispose();
+    if (cubeMaterial instanceof Array) {
+      cubeMaterial.forEach((eachMaterial) => eachMaterial.dispose());
+    } else {
+      cubeMaterial.dispose();
+    }
+  };
+
+  public setCubeMaterial = (
+    cubeTextureOptions: CubeTextureOptions | Array<CubeTextureOptions>
+  ): void => {
+    const newMaterial = cubeTextureOptions instanceof Array
+    ? cubeTextureOptions.map(
+        (option) => new THREE.MeshPhongMaterial(option)
+      )
+    : new THREE.MeshPhongMaterial(cubeTextureOptions);
+    this.material = newMaterial
+    this.getCubeMesh().material = newMaterial;
+    this.cubeTextureOptions = cubeTextureOptions;
   };
 
   static changeSizesFromField = (
