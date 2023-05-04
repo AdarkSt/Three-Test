@@ -101,7 +101,7 @@ setButton.addEventListener("click", () => {
 
   materialsForCube.forEach((material, index) => {
     if (index === 0 || index === 1) {
-      material.map?.repeat.set(SizeCalculator.meterToCm(cubeDepth) / 10, cubeHeight/cubeHeight );
+      material.map?.repeat.set(SizeCalculator.meterToCm(cubeDepth) / 10, cubeHeight/cubeHeight);
       material.needsUpdate = true;
     } else if (index === 4 || index === 5) {
       material.map?.repeat.set(SizeCalculator.meterToCm(cubeWidth) / 10, cubeHeight/cubeHeight);
