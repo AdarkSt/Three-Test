@@ -7,7 +7,7 @@ import _cloneDeep from "lodash/cloneDeep";
 import "./style.scss";
 import { SizeCalculator } from "./utils/SizeCalculator";
 
-// declaring user interface elements 
+// declaring user interface elements
 const widthInput = document.getElementById("width-input") as HTMLInputElement;
 const depthInput = document.getElementById("depth-input") as HTMLInputElement;
 const setButton = document.getElementById("set-button") as HTMLButtonElement;
@@ -20,13 +20,15 @@ const textureLoader = new THREE.TextureLoader();
 const cubeInitialSize = SizeCalculator.feetToMeter(8);
 
 // creating separate material for each side of cube
-const materialsForCube: Array<any> =
-  [];
+const materialsForCube: Array<any> = [];
 for (let i = 0; i < 6; ++i) {
   const woodTexture = textureLoader.load("assets/wood.jpg", (texture) => {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.MirroredRepeatWrapping;
-    texture.repeat.set(SizeCalculator.meterToCm(cubeInitialSize) / 10, 8);
+    texture.repeat.set(
+      SizeCalculator.meterToCm(cubeInitialSize) / 10,
+      SizeCalculator.meterToFeet(cubeInitialSize) / SizeCalculator.meterToFeet(cubeInitialSize)
+    );
   });
   materialsForCube.push({
     map: woodTexture,
@@ -41,7 +43,7 @@ for (let i = 0; i < 6; ++i) {
   });
 }
 
-// creating cube 
+// creating cube
 const cube = new Cube(
   {
     width: cubeInitialSize,
@@ -78,7 +80,7 @@ function moveCameraToLeft() {
   controls.update();
 }
 
-// function which trigers when user setting new sizes 
+// function which trigers when user setting new sizes
 setButton.addEventListener("click", () => {
   Cube.changeSizesFromField(
     widthInput,
@@ -92,20 +94,23 @@ setButton.addEventListener("click", () => {
     cube,
     SizeCalculator.feetToMeter
   );
-  const { width: cubeWidth = 0, depth: cubeDepth = 0 } = cube.getCubeOptions();
+  const { width: cubeWidth = 0, depth: cubeDepth = 0, height: cubeHeight = 0 } = cube.getCubeOptions();
   camera.position.set(0, 0, Math.max(cubeWidth, cubeDepth) + 2);
   controls.target.set(0, 0, 0);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
   materialsForCube.forEach((material, index) => {
     if (index === 0 || index === 1) {
-      material.map?.repeat.set(SizeCalculator.meterToCm(cubeDepth) / 10, 8);
+      material.map?.repeat.set(SizeCalculator.meterToCm(cubeDepth) / 10, cubeHeight/cubeHeight );
       material.needsUpdate = true;
     } else if (index === 4 || index === 5) {
-      material.map?.repeat.set(SizeCalculator.meterToCm(cubeWidth) / 10, 8);
+      material.map?.repeat.set(SizeCalculator.meterToCm(cubeWidth) / 10, cubeHeight/cubeHeight);
+      material.needsUpdate = true;
+    } else if (index === 2 || index === 3) {
+      material.map?.repeat.set(SizeCalculator.meterToCm(cubeWidth) / 10, cubeDepth/cubeHeight);
       material.needsUpdate = true;
     }
-  });
+  })
   cube.setCubeMaterial(materialsForCube);
 });
 

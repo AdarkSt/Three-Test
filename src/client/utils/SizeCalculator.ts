@@ -1,4 +1,4 @@
-import { CM_TO_METER, FEET_TO_CM, FEET_TO_METER, METER_TO_CM } from "../constants";
+import { CM_TO_METER, FEET_TO_CM, FEET_TO_METER, METER_TO_CM, METER_TO_FEET } from "../constants";
 
 export class SizeCalculator {
   static feetToMeter = (feet: number): number => {
@@ -12,5 +12,8 @@ export class SizeCalculator {
   }
   static meterToCm = (meter: number): number => {
     return meter * METER_TO_CM
+  }
+  static meterToFeet = (meter: number): number => {
+    return meter * METER_TO_FEET
   }
 }
